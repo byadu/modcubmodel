@@ -1,4 +1,12 @@
-cfgattribs<- function(input, output, session) {
+#' @export
+#' @title cfgattribs
+#' @description Display, edit, create attributes
+#' @param input is shiny input variable
+#' @param output is shiny output variable
+#' @param session is shiny session variable
+#' @param M is the meta data connection structure
+#' @param D is the data connection structure
+cfgattribs<- function(input, output, session, M, D) {
 	ns<- session$ns
 
 	output$dimensions<- renderDataTable(
@@ -27,13 +35,18 @@ cfgattribs<- function(input, output, session) {
 		tab<- isolate(input$tab)
 		col<- isolate(input$col)
 		wherec<- isolate(input$wherec)
-		addattrib(catg,name,tab,col,wherec)
+		addattrib(M, catg,name,tab,col,wherec)
 		createAlert(session, ns("saveattrib"), ns("attribsaved"), title="", content=paste("Attribute saved:", strong(name)))
 		}
 		)
 	}
 
-cfgattribsUI<- function(id) {
+#' @export
+#' @title cfgattribsUI
+#' @description UI for Display, edit, create attributes
+#' @param id is caller id
+#' @param M is the meta data connection structure
+cfgattribsUI<- function(id, M) {
 	ns<- NS(id)
 	cats<- list()
 	dimgrp<- M$mt$dimgrp

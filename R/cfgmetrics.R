@@ -1,4 +1,12 @@
-cfgmetrics<- function(input, output, session) {
+#' @export
+#' @title cfgmetrics
+#' @description Display, edit, create measures
+#' @param input is shiny input variable
+#' @param output is shiny output variable
+#' @param session is shiny session variable
+#' @param M is the meta data connection structure
+#' @param D is the data connection structure
+cfgmetrics<- function(input, output, session, M, D) {
 	ns<- session$ns
 
 	output$measures<- renderDataTable(
@@ -38,7 +46,7 @@ cfgmetrics<- function(input, output, session) {
 		wherec<- isolate(input$wherec)
 		groupfun<- isolate(input$groupfun)
 		tcol<- isolate(input$timecol)
-		addmetric(catg, name,tab,col,wherec,groupfun,tcol)
+		addmetric(M, catg, name,tab,col,wherec,groupfun,tcol)
 		createAlert(session, ns("savemetric"), ns("metricsaved"), title="", content=paste("Metric saved:", strong(name)))
 		}
 		)
@@ -46,13 +54,18 @@ cfgmetrics<- function(input, output, session) {
 	observeEvent(input$addmetricatg, {
 		catg<- isolate(input$category)
 		tab<- isolate(input$tabcat)
-		addmetricatg(catg,tab)
+		addmetricatg(M, catg,tab)
 		createAlert(session, ns("savemetric"), ns("metricatgsaved"), title="Yo", content=paste("Metric Category saved:", strong(catg)))
 		}
 		)
 	}
 
-cfgmetricsUI<- function(id) {
+#' @export
+#' @title cfgmetricsUI
+#' @description UI for Display, edit, create measures
+#' @param id is caller id
+#' @param M is the meta data connection structure
+cfgmetricsUI<- function(id, M) {
 	ns<- NS(id)
 	cats<- list()
 	measgrp<- M$mt$measgrp

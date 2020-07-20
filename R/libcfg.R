@@ -1,4 +1,4 @@
-getnextid<- function(catg, md) {
+getnextid<- function(M, catg, md) {
 	catg<- as.integer(catg)
 	if(md == 'm')
 		mgid<- M$mt$measgrp$md_id
@@ -26,9 +26,9 @@ getnextid<- function(catg, md) {
 	}
 
 
-addattrib<- function(catg, name, tab, col, where) {
+addattrib<- function(M, catg, name, tab, col, where) {
 	cat("addattrib", catg, name, tab, col, where, '\n') 
-	id<- getnextid(catg, 'd')
+	id<- getnextid(M, catg, 'd')
 	q<- paste("insert into menu_trees values(", id, ",", catg, ",'common', 'DisplayF')")
 	dbExecute(M$mycfg, q)
 	q<- paste0("insert into menu_dtls(md_id, md_name, md_table, md_column, md_where) values(", id, ",'", name, "','",  tab, "','", col, "','", where, "')")
@@ -36,9 +36,9 @@ addattrib<- function(catg, name, tab, col, where) {
 	dbExecute(M$mycfg, q)
 	}
 
-addmetric<- function(catg, name, tab, col, where, sumcnt, tcol) {
+addmetric<- function(M, catg, name, tab, col, where, sumcnt, tcol) {
 	cat("addmetric", catg, name, tab, col, where, sumcnt, tcol, '\n') 
-	id<- getnextid(catg, 'm')
+	id<- getnextid(M, catg, 'm')
 	q<- paste("insert into menu_trees values(", id, ",", catg, ",'common', 'DisplayF')")
 	print(q)
 	dbExecute(M$mycfg, q)
@@ -46,10 +46,10 @@ addmetric<- function(catg, name, tab, col, where, sumcnt, tcol) {
 	print(q)
 	dbExecute(M$mycfg, q)
 	}
-getnextmetricatg<- function() {
+getnextmetricatg<- function(M) {
 	M$mt$measgrp[nrow(M$mt$measgrp),1] + 100
 	}
-addmetricatg<- function(catg, tab) {
+addmetricatg<- function(M, catg, tab) {
 	id<- getnextmetricatg()
 	q<- paste("insert into menu_trees values(", id, ",10000, 'common', 'DisplayF')")
 	print(q)
